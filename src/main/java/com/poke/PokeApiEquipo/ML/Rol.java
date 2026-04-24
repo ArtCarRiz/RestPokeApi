@@ -4,13 +4,27 @@
  */
 package com.poke.PokeApiEquipo.ML;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author digis
  */
+@Entity
+@Table(name = "Rol")
 public class Rol {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idrol")
     private int IdRol;
+    
+    @Column(name = "nombrerol")
     private String NombreRol;
 
     public Rol(){
@@ -26,7 +40,7 @@ public class Rol {
         return IdRol;
     }
     
-    public void setRol(int IdRol){
+    public void setIdRol(int IdRol){
         this.IdRol = IdRol;
     }
     
