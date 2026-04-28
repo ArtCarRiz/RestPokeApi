@@ -20,7 +20,7 @@ public class Pokemon {
     @Column(name = "nombre")
     private String Nombre;
     
-    @ManyToMany(mappedBy = "idsuario")
+    @ManyToMany(mappedBy = "pokemones")
     private List<Usuario> usuarios;
     
     public Pokemon (){
