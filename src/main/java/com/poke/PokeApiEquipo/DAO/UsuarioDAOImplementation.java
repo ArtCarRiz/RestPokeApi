@@ -4,6 +4,7 @@
  */
 package com.poke.PokeApiEquipo.DAO;
 
+import com.poke.PokeApiEquipo.ML.Pokemon;
 import com.poke.PokeApiEquipo.ML.Result;
 import com.poke.PokeApiEquipo.ML.Rol;
 import com.poke.PokeApiEquipo.ML.Usuario;
@@ -47,5 +48,37 @@ public class UsuarioDAOImplementation implements IUsuario{
         }
         return result;
     }
+
+    @Override
+    @Transactional
+    public Result AddFavorito(Pokemon pokemon, int identificador) {
+        Result result = new Result();
+        try {
+            
+            Pokemon favorito = new Pokemon();
+            favorito.setIdPokemon(pokemon.getIdPokemon());
+            favorito.setNombre(pokemon.getNombre());
+            
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(identificador);
+            
+            entityManager.getTransaction().begin();
+            
+            usuario = entityManager.find(Usuario.class, this);
+            favorito = entityManager.find(Pokemon.class, this);
+            
+            usuario.getPokemones().add(favorito);
+            entityManager.merge(usuario);
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+
+        return result;
+    }
+    
+    
     
 }

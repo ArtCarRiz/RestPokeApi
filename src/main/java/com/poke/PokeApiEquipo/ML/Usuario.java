@@ -10,9 +10,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
@@ -32,7 +35,7 @@ public class Usuario {
 
     @Column(name = "correo")
     private String Correo;
-    
+
     @Column(name = "contraseña")
     private String Password;
 
@@ -40,6 +43,9 @@ public class Usuario {
     @JoinColumn(name = "rol")
     public com.poke.PokeApiEquipo.ML.Rol Rol;
 
+    @ManyToMany
+    @JoinTable(name = "favoritos", joinColumns = @JoinColumn (name = "idusuario"), inverseJoinColumns = @JoinColumn(name = "idpokemon"))
+    List<Pokemon> pokemones;
 
     public Usuario() {
 
@@ -92,6 +98,12 @@ public class Usuario {
         this.Rol = Rol;
     }
 
+    public List<Pokemon> getPokemones() {
+        return pokemones;
+    }
 
+    public void setPokemones(List<Pokemon> pokemones) {
+        this.pokemones = pokemones;
+    }
 
 }

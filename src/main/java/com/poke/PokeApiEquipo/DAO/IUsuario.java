@@ -4,6 +4,7 @@
  */
 package com.poke.PokeApiEquipo.DAO;
 
+import com.poke.PokeApiEquipo.ML.Pokemon;
 import com.poke.PokeApiEquipo.ML.Result;
 import com.poke.PokeApiEquipo.ML.Usuario;
 /**
@@ -12,4 +13,5 @@ import com.poke.PokeApiEquipo.ML.Usuario;
  */
 public interface IUsuario {
     Result Add(Usuario usuario);
+    Result AddFavorito(Pokemon pokemon, int identificador);
 }

@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import java.util.List;
+import org.hibernate.annotations.ManyToAny;
 
 
 @Entity
@@ -16,6 +19,9 @@ public class Pokemon {
     private int IdPokemon;
     @Column(name = "nombre")
     private String Nombre;
+    
+    @ManyToMany(mappedBy = "idsuario")
+    private List<Usuario> usuarios;
     
     public Pokemon (){
     

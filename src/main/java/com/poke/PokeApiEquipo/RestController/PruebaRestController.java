@@ -2,6 +2,7 @@
 package com.poke.PokeApiEquipo.RestController;
 
 import com.poke.PokeApiEquipo.DAO.UsuarioDAOImplementation;
+import com.poke.PokeApiEquipo.ML.Pokemon;
 import com.poke.PokeApiEquipo.ML.Result;
 import com.poke.PokeApiEquipo.ML.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,28 @@ public class PruebaRestController {
             result.ex = e;
         }
         return ResponseEntity.status(500).body(result);
+    }
+    
+    @PostMapping ("/favorito")
+    public ResponseEntity addFavorito(@RequestBody Pokemon pokemon, @RequestBody int identificador){
+        Result result = new Result();
+        try {
+            
+            result = usuarioDAOImplementation.AddFavorito(pokemon, identificador);
+            
+            if (result.correct) {
+                return ResponseEntity.status(200).body(result);
+            }else{
+                return ResponseEntity.status(400).body(result);
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+            
+        }
+        return ResponseEntity.badRequest().body(result);
     }
     
 
