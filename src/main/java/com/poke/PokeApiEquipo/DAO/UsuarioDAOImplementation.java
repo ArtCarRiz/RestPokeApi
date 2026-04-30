@@ -18,8 +18,8 @@ import org.springframework.stereotype.Repository;
  * @author digis
  */
 @Repository
-public class UsuarioDAOImplementation implements IUsuario{
-    
+public class UsuarioDAOImplementation implements IUsuario {
+
     @Autowired
     private EntityManager entityManager;
 
@@ -28,19 +28,19 @@ public class UsuarioDAOImplementation implements IUsuario{
     public Result Add(Usuario usuario) {
         Result result = new Result();
         try {
-            
+
             Usuario usuarioMl = new Usuario();
-            
+
             usuarioMl.setUserName(usuario.getUserName());
             usuarioMl.setPassword(usuario.getPassword());
             usuarioMl.setCorreo(usuario.getCorreo());
-            
+
             usuarioMl.Rol = new Rol();
             usuarioMl.Rol.setIdRol(usuario.Rol.getIdRol());
-            
+
             entityManager.persist(usuarioMl);
             result.correct = true;
-            
+
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
@@ -49,36 +49,4 @@ public class UsuarioDAOImplementation implements IUsuario{
         return result;
     }
 
-    @Override
-    @Transactional
-    public Result AddFavorito(Pokemon pokemon, int identificador) {
-        Result result = new Result();
-        try {
-            
-            Pokemon favorito = new Pokemon();
-            favorito.setIdPokemon(pokemon.getIdPokemon());
-            favorito.setNombre(pokemon.getNombre());
-            
-            Usuario usuario = new Usuario();
-            usuario.setIdUsuario(identificador);
-            
-            entityManager.getTransaction().begin();
-            
-            usuario = entityManager.find(Usuario.class, this);
-            favorito = entityManager.find(Pokemon.class, this);
-            
-            usuario.getPokemones().add(favorito);
-            entityManager.merge(usuario);
-            
-        } catch (Exception e) {
-            result.correct = false;
-            result.errorMessage = e.getLocalizedMessage();
-            result.ex = e;
-        }
-
-        return result;
-    }
-    
-    
-    
 }

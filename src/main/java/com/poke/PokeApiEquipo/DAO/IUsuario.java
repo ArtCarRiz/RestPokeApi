@@ -13,5 +13,5 @@ import com.poke.PokeApiEquipo.ML.Usuario;
  */
 public interface IUsuario {
     Result Add(Usuario usuario);
-    Result AddFavorito(Pokemon pokemon, int identificador);
+    
 }

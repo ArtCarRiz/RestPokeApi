@@ -1,6 +1,7 @@
 
 package com.poke.PokeApiEquipo.ML;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,38 +15,41 @@ import org.hibernate.annotations.ManyToAny;
 @Entity
 public class Pokemon {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idPokemon")
-    private int IdPokemon;
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idpokemon")
+    private int idPokemon;
     @Column(name = "nombre")
-    private String Nombre;
+    private String name;
     
-    @ManyToMany(mappedBy = "pokemones")
+    @ManyToMany(mappedBy = "pokemones", cascade = CascadeType.ALL)
     private List<Usuario> usuarios;
     
     public Pokemon (){
     
     }
-    
-    public Pokemon (int IdPokemon, String Nombre){
-        
-        this.IdPokemon = IdPokemon;
-        this.Nombre = Nombre;
+
+    public Pokemon(int idPokemon, String name) {
+        this.idPokemon = idPokemon;
+        this.name = name;
     }
 
     public int getIdPokemon() {
-        return IdPokemon;
+        return idPokemon;
     }
 
-    public void setIdPokemon(int IdPokemon) {
-        this.IdPokemon = IdPokemon;
+    public void setIdPokemon(int idPokemon) {
+        this.idPokemon = idPokemon;
     }
 
-    public String getNombre() {
-        return Nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setName(String name) {
+        this.name = name;
     }
+
+
+    
+
 }
