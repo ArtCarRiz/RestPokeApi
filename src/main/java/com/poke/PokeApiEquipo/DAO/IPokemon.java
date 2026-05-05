@@ -4,6 +4,7 @@
  */
 package com.poke.PokeApiEquipo.DAO;
 
+import com.poke.PokeApiEquipo.ML.Pokemon;
 import com.poke.PokeApiEquipo.ML.Result;
 
 /**
@@ -13,5 +14,7 @@ import com.poke.PokeApiEquipo.ML.Result;
 public interface IPokemon {
     
     Result GetAll();
-    
+    Result AddFavorito(Pokemon pokemon, int identificador);
+    Result RemoveFavorito(int identificador, int identificadorPokemon);
+    Result GetFavById (int identificador);
 }
