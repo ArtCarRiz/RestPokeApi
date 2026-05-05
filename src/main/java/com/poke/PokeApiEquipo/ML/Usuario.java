@@ -22,10 +22,7 @@ import java.util.List;
  * @author digis
  */
 @Entity
-@Table(name = "USUARIO")
-=======
 @Table(name = "USUARIO", schema = "EQUIPOPOKEAPI")
->>>>>>> origin/JMS-Correo
 public class Usuario {
 
     @Id
@@ -44,7 +41,7 @@ public class Usuario {
     
     @Column(name = "status")
     private int Status;
->>>>>>> origin/JMS-Correo
+
 
     @ManyToOne
     @JoinColumn(name = "rol")
@@ -58,18 +55,15 @@ public class Usuario {
 
     }
 
-    public Usuario(int IdUsuario, String UserName, String Correo, String Password) {
-=======
+
     public Usuario(int IdUsuario, String UserName, String Correo, String Password, int Status) {
->>>>>>> origin/JMS-Correo
+
         this.IdUsuario = IdUsuario;
         this.UserName = UserName;
         this.Correo = Correo;
         this.Password = Password;
-<<<<<<< HEAD
-=======
         this.Status = Status;
->>>>>>> origin/JMS-Correo
+
     }
 
     public int getIdUsuario() {
@@ -120,8 +114,6 @@ public class Usuario {
         this.pokemones = pokemones;
     }
 
-<<<<<<< HEAD
-=======
     public int getStatus() {
         return Status;
     }
@@ -130,5 +122,4 @@ public class Usuario {
         this.Status = Status;
     }
      
->>>>>>> origin/JMS-Correo
 }

@@ -30,11 +30,9 @@ public class PokemonDAOImplementation implements IPokemon {
 
     @Override
     @Transactional
-<<<<<<< HEAD
+
     public Result AddFavorito(Pokemon pokemon, int identificador) {
-=======
-        public Result AddFavorito(Pokemon pokemon, int identificador) {
->>>>>>> origin/JMS-Correo
+
         Result result = new Result();
         try {
 
@@ -56,11 +54,9 @@ public class PokemonDAOImplementation implements IPokemon {
                     entityManager.merge(usuario);
                 }
                 result.correct = true;
-<<<<<<< HEAD
+
             } else {
-=======
-            }else{
->>>>>>> origin/JMS-Correo
+
                 result.correct = false;
                 result.errorMessage = "el usuario no existe";
             }
@@ -79,50 +75,34 @@ public class PokemonDAOImplementation implements IPokemon {
     public Result RemoveFavorito(int identificador, int identificadorPokemon) {
         Result result = new Result();
         try {
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> origin/JMS-Correo
             Pokemon pokemon = entityManager.find(Pokemon.class, identificadorPokemon);
             Usuario usuario = entityManager.find(Usuario.class, identificador);
             usuario.getPokemones().contains(pokemon);
             if (usuario.getPokemones().contains(pokemon)) {
                 usuario.getPokemones().remove(pokemon);
                 result.correct = true;
-<<<<<<< HEAD
             } else {
                 result.correct = false;
                 result.errorMessage = "ese pokemon no existe";
             }
 
-=======
-            }else{
-                result.correct = false;
-                result.errorMessage = "ese pokemon no existe";
-            }
-            
->>>>>>> origin/JMS-Correo
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
             result.ex = e;
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> origin/JMS-Correo
         return result;
     }
 
     @Override
     public Result GetFavById(int identificador) {
         Result result = new Result();
-        try {
-<<<<<<< HEAD
 
-            Usuario usuario = entityManager.find(Usuario.class, identificador);
+        try {
+
+            Usuario usuario = entityManager.find(Usuario.class,
+                    identificador);
             if (usuario == null) {
                 result.correct = false;
                 result.errorMessage = "ese usuario no existe";
@@ -130,16 +110,9 @@ public class PokemonDAOImplementation implements IPokemon {
                 List<Pokemon> pokemonesFav = usuario.getPokemones();
                 result.objects = pokemonesFav;
                 result.correct = true;
+
             }
 
-=======
-            
-            Usuario usuario = entityManager.find(Usuario.class, identificador);
-            
-            List<Pokemon> pokemonesFav = usuario.getPokemones();
-            result = (Result) pokemonesFav;
-            result.correct = true;
->>>>>>> origin/JMS-Correo
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
@@ -147,9 +120,5 @@ public class PokemonDAOImplementation implements IPokemon {
         }
         return result;
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> origin/JMS-Correo
 }
