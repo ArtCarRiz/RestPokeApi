@@ -23,6 +23,10 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/pokemon")
 @CrossOrigin(origins = "http://localhost:4200")
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/JMS-Correo
 public class PruebaRestController {
 
     @Autowired
@@ -30,6 +34,15 @@ public class PruebaRestController {
 
     @Autowired
     private PokemonDAOImplementation pokemonDAOImplementation;
+<<<<<<< HEAD
+=======
+    
+    @Autowired
+    private UsuarioService usuarioService;
+    
+    @PersistenceContext
+    private EntityManager entityManager;
+>>>>>>> origin/JMS-Correo
 
     String rutaBase = "https://pokeapi.co/api/v2/pokemon/";
 
@@ -60,20 +73,48 @@ public class PruebaRestController {
     @PostMapping
     public ResponseEntity addUsuario(@RequestBody Usuario usuario) {
         Result result = new Result();
+<<<<<<< HEAD
         try {
             result = usuarioDAOImplementation.Add(usuario);
+=======
+
+        try {
+            result = usuarioService.Add(usuario);
+
+>>>>>>> origin/JMS-Correo
             if (result.correct) {
                 return ResponseEntity.ok(result);
             } else {
                 return ResponseEntity.status(400).body(result);
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/JMS-Correo
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
             result.ex = e;
         }
+<<<<<<< HEAD
         return ResponseEntity.status(500).body(result);
     }
+=======
+
+        return ResponseEntity.status(500).body(result);
+    }
+    
+    @GetMapping("/verificar")
+    public ResponseEntity verificarCuenta(@RequestParam String token) {
+        Result result = usuarioService.verificarCuenta(token);
+
+        if (result.correct) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(400).body(result);
+        }
+    }
+>>>>>>> origin/JMS-Correo
 
     @PostMapping("/favorito")
     public ResponseEntity addFavorito(@RequestBody Pokemon pokemon, @RequestParam int identificador) {
@@ -123,7 +164,11 @@ public class PruebaRestController {
         try {
             result = pokemonDAOImplementation.GetFavById(identificador);
             if (result.correct) {
+<<<<<<< HEAD
                 return ResponseEntity.status(200).body(result.objects);
+=======
+                return ResponseEntity.status(200).body(result);
+>>>>>>> origin/JMS-Correo
             }else{
                 return ResponseEntity.status(400).body(result);
             }
@@ -134,5 +179,8 @@ public class PruebaRestController {
         }
         return ResponseEntity.badRequest().body(result);
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> origin/JMS-Correo
 }
