@@ -23,7 +23,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
             helper.setTo(correo);
-            helper.setSubject("Verificacion de tu cuenta");
+            helper.setSubject("Verificacion de tu cuentaa");
 
             String html = """
             <html>
