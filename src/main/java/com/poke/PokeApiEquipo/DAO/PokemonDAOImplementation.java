@@ -18,7 +18,8 @@ import org.springframework.stereotype.Repository;
  * @author digis
  */
 @Repository
-public class PokemonDAOImplementation implements IPokemon{
+public class PokemonDAOImplementation implements IPokemon {
+
     @Autowired
     EntityManager entityManager;
 
@@ -29,7 +30,7 @@ public class PokemonDAOImplementation implements IPokemon{
 
     @Override
     @Transactional
-        public Result AddFavorito(Pokemon pokemon, int identificador) {
+    public Result AddFavorito(Pokemon pokemon, int identificador) {
         Result result = new Result();
         try {
 
@@ -51,7 +52,7 @@ public class PokemonDAOImplementation implements IPokemon{
                     entityManager.merge(usuario);
                 }
                 result.correct = true;
-            }else{
+            } else {
                 result.correct = false;
                 result.errorMessage = "el usuario no existe";
             }
@@ -70,24 +71,24 @@ public class PokemonDAOImplementation implements IPokemon{
     public Result RemoveFavorito(int identificador, int identificadorPokemon) {
         Result result = new Result();
         try {
-            
+
             Pokemon pokemon = entityManager.find(Pokemon.class, identificadorPokemon);
             Usuario usuario = entityManager.find(Usuario.class, identificador);
             usuario.getPokemones().contains(pokemon);
             if (usuario.getPokemones().contains(pokemon)) {
                 usuario.getPokemones().remove(pokemon);
                 result.correct = true;
-            }else{
+            } else {
                 result.correct = false;
                 result.errorMessage = "ese pokemon no existe";
             }
-            
+
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
             result.ex = e;
         }
-        
+
         return result;
     }
 
@@ -95,12 +96,17 @@ public class PokemonDAOImplementation implements IPokemon{
     public Result GetFavById(int identificador) {
         Result result = new Result();
         try {
-            
+
             Usuario usuario = entityManager.find(Usuario.class, identificador);
-            
-            List<Pokemon> pokemonesFav = usuario.getPokemones();
-            result = (Result) pokemonesFav;
-            result.correct = true;
+            if (usuario == null) {
+                result.correct = false;
+                result.errorMessage = "ese usuario no existe";
+            } else {
+                List<Pokemon> pokemonesFav = usuario.getPokemones();
+                result.objects = pokemonesFav;
+                result.correct = true;
+            }
+
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
@@ -108,5 +114,5 @@ public class PokemonDAOImplementation implements IPokemon{
         }
         return result;
     }
-    
+
 }

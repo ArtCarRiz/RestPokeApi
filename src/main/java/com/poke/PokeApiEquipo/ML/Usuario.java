@@ -36,7 +36,7 @@ public class Usuario {
     @Column(name = "correo")
     private String Correo;
 
-    @Column(name = "contraseña")
+    @Column(name = "password")
     private String Password;
 
     @ManyToOne

@@ -123,7 +123,7 @@ public class PruebaRestController {
         try {
             result = pokemonDAOImplementation.GetFavById(identificador);
             if (result.correct) {
-                return ResponseEntity.status(200).body(result);
+                return ResponseEntity.status(200).body(result.objects);
             }else{
                 return ResponseEntity.status(400).body(result);
             }
