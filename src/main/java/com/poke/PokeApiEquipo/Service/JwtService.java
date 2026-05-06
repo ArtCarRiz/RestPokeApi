@@ -70,7 +70,13 @@ public class JwtService {
             .compact();
     }
     
-
+    public boolean isTokenValid(String token) {
+        return !isTokenExpired(token);
+    }
+    
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = Jwts.parser()
