@@ -31,24 +31,31 @@ public class UsuarioDAOImplementation implements IUsuario {
         Result result = new Result();
 
         try {
-            Usuario usuarioMl = new Usuario();
 
-            usuarioMl.setUserName(usuario.getUserName());
-            usuarioMl.setPassword(usuario.getPassword());
-            usuarioMl.setCorreo(usuario.getCorreo());
+            result = verificarUsername(usuario);
+            if (result.correct) {
 
-            usuarioMl.setStatus(0);
+                Usuario usuarioMl = new Usuario();
 
-            usuarioMl.Rol = new Rol();
-            usuarioMl.Rol.setIdRol(usuario.Rol.getIdRol());
+                usuarioMl.setUserName(usuario.getUserName());
+                usuarioMl.setPassword(usuario.getPassword());
+                usuarioMl.setCorreo(usuario.getCorreo());
 
-            entityManager.persist(usuarioMl);
-            result.correct = true;
-            entityManager.flush();
+                usuarioMl.setStatus(0);
 
-            result.correct = true;
-            result.object = usuarioMl;
+                usuarioMl.Rol = new Rol();
+                usuarioMl.Rol.setIdRol(usuario.Rol.getIdRol());
 
+                entityManager.persist(usuarioMl);
+                result.correct = true;
+                entityManager.flush();
+
+                result.correct = true;
+                result.object = usuarioMl;
+            }else{
+                result.correct = false;
+                return result;
+            }
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
@@ -57,6 +64,7 @@ public class UsuarioDAOImplementation implements IUsuario {
         return result;
     }
 
+    @Override
     @Transactional
     public Result activarUsuarioPorCorreo(String correo) {
         Result result = new Result();
@@ -83,4 +91,61 @@ public class UsuarioDAOImplementation implements IUsuario {
 
         return result;
     }
+
+    @Override
+    @Transactional
+    public Result verificarUsername(Usuario usuario) {
+        Result result = new Result();
+        try {
+
+            Long conteo = entityManager.createQuery("select count (u) from Usuario u where upper (u.Correo) = upper (:correo)\n"
+                    + "or upper(u.UserName) = upper (:username)", Long.class)
+                    .setParameter("username", usuario.getUserName())
+                    .setParameter("correo", usuario.getCorreo())
+                    .getSingleResult();
+
+            boolean existe = conteo > 0;
+            if (existe == true) {
+                result.correct = false;
+                return result;
+            } else {
+                result.correct = true;
+                return result;
+            }
+
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+    
+    @Override
+    @Transactional
+    public Result verificarUsuario(Usuario usuario){
+        Result result = new Result();
+        try {
+            
+            String consulta = "select UserName from Usuario where Correo = :correo and Password = :password";
+            Usuario usuarioEncontrado = entityManager.createQuery(consulta, Usuario.class)
+                    .setParameter("password", usuario.getPassword())
+                    .setParameter("correo", usuario.getCorreo())
+                    .getSingleResult();
+            
+            if (usuarioEncontrado != null) {
+                result.correct = true;
+            }else{
+                result.correct = false;
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+    
+    
 }

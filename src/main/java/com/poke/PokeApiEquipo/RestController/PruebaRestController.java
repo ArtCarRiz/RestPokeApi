@@ -158,5 +158,25 @@ public class PruebaRestController {
         }
         return ResponseEntity.badRequest().body(result);
     }
+    
+    @GetMapping("/verificarDatos")
+    public ResponseEntity verificarDatos(@RequestBody Usuario usuario){
+        Result result = new Result();
+        try {
+            
+            result = usuarioDAOImplementation.verificarUsername(usuario);
+            if (result.correct) {
+                return ResponseEntity.status(200).body(result);
+            }else{
+                return ResponseEntity.status(200).body(result);
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return ResponseEntity.badRequest().body(result);
+    }
 
 }
