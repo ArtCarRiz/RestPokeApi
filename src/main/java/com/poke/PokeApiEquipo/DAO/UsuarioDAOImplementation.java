@@ -80,4 +80,23 @@ public class UsuarioDAOImplementation implements IUsuario {
 
         return result;
     }
+    
+    public Result getByUserName(String username){
+        Result result = new Result();
+        try{
+            Usuario usuario = entityManager.createQuery("From Usuario Where UserName = :UserName", Usuario.class)
+                    .setParameter("UserName", username)
+                    .getSingleResult();
+            
+            result.object = usuario;
+            result.correct = true;
+            
+        }catch(Exception ex){
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
+        return result;
+    }
 }

@@ -23,7 +23,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
             helper.setTo(correo);
-            helper.setSubject("Verificacion de tu cuentaa");
+            helper.setSubject("Verificacion de tu cuenta");
 
             String html = """
             <html>
@@ -71,7 +71,7 @@ public class EmailService {
             mailSender.send(mensaje);
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al enviar correo: " + e.getMessage());
+            throw new RuntimeException("Error al enviar correoo: " + e.getMessage());
         }
     }
 }

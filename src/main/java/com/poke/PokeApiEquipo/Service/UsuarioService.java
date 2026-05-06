@@ -60,7 +60,7 @@ public class UsuarioService {
         try{
             if(!jwtService.isVerificationTokenValid(token)){
                 result.correct = false;
-                result.errorMessage = "Token invalido o expirado";
+                result.errorMessage = "Token invalido y/o expirado";
                 return result;
             }
             
