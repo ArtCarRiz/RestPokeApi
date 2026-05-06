@@ -93,6 +93,7 @@
             <artifactId>spring-boot-starter-artemis</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>

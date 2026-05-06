@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
  * @author digis
  */
 @Entity
-@Table(name = "ROL")
+@Table(name = "Rol")
 public class Rol {
 
     @Id

@@ -42,6 +42,7 @@ public class Usuario {
     @Column(name = "status")
     private int Status;
 
+
     @ManyToOne
     @JoinColumn(name = "rol")
     public com.poke.PokeApiEquipo.ML.Rol Rol;
@@ -54,12 +55,15 @@ public class Usuario {
 
     }
 
+
     public Usuario(int IdUsuario, String UserName, String Correo, String Password, int Status) {
+
         this.IdUsuario = IdUsuario;
         this.UserName = UserName;
         this.Correo = Correo;
         this.Password = Password;
         this.Status = Status;
+
     }
 
     public int getIdUsuario() {

@@ -25,8 +25,6 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/pokemon")
 @CrossOrigin(origins = "http://localhost:4200")
-
-
 public class PruebaRestController {
 
     @Autowired
@@ -34,10 +32,10 @@ public class PruebaRestController {
 
     @Autowired
     private PokemonDAOImplementation pokemonDAOImplementation;
-    
+
     @Autowired
     private UsuarioService usuarioService;
-    
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -79,7 +77,6 @@ public class PruebaRestController {
             } else {
                 return ResponseEntity.status(400).body(result);
             }
-
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
@@ -88,7 +85,7 @@ public class PruebaRestController {
 
         return ResponseEntity.status(500).body(result);
     }
-    
+
     @GetMapping("/verificar")
     public ResponseEntity verificarCuenta(@RequestParam String token) {
         Result result = usuarioService.verificarCuenta(token);
@@ -121,19 +118,19 @@ public class PruebaRestController {
         }
         return ResponseEntity.badRequest().body(result);
     }
-    
+
     @DeleteMapping
-    public ResponseEntity deleteFavorito(@RequestParam int identificador, @RequestParam int identificadorPokemon){
+    public ResponseEntity deleteFavorito(@RequestParam int identificador, @RequestParam int identificadorPokemon) {
         Result result = new Result();
         try {
-            
+
             result = pokemonDAOImplementation.RemoveFavorito(identificador, identificadorPokemon);
             if (result.correct) {
                 ResponseEntity.status(200).body(result);
-            }else{
+            } else {
                 ResponseEntity.status(400).body(result);
             }
-            
+
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
@@ -141,15 +138,17 @@ public class PruebaRestController {
         }
         return ResponseEntity.status(500).body(result);
     }
-    
+
     @GetMapping("/getFav")
-    public ResponseEntity getFavById(@RequestParam int identificador){
+    public ResponseEntity getFavById(@RequestParam int identificador) {
         Result result = new Result();
         try {
             result = pokemonDAOImplementation.GetFavById(identificador);
             if (result.correct) {
-                return ResponseEntity.status(200).body(result);
-            }else{
+
+                return ResponseEntity.status(200).body(result.objects);
+
+            } else {
                 return ResponseEntity.status(400).body(result);
             }
         } catch (Exception e) {
@@ -159,4 +158,25 @@ public class PruebaRestController {
         }
         return ResponseEntity.badRequest().body(result);
     }
+    
+    @GetMapping("/verificarDatos")
+    public ResponseEntity verificarDatos(@RequestBody Usuario usuario){
+        Result result = new Result();
+        try {
+            
+            result = usuarioDAOImplementation.verificarUsername(usuario);
+            if (result.correct) {
+                return ResponseEntity.status(200).body(result);
+            }else{
+                return ResponseEntity.status(200).body(result);
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return ResponseEntity.badRequest().body(result);
+    }
+
 }

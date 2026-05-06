@@ -19,7 +19,7 @@ public class DataSourceConfig {
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:oracle:thin:@192.167.1.13:1521:orcl");
+        dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:orcl");
         dataSource.setUsername("EquipoPokeApi");
         dataSource.setPassword("password1");
         

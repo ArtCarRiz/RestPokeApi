@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UsuarioDAOImplementation implements IUsuario {
 
+    @Autowired
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -30,38 +31,48 @@ public class UsuarioDAOImplementation implements IUsuario {
         Result result = new Result();
 
         try {
-            Usuario usuarioMl = new Usuario();
 
-            usuarioMl.setUserName(usuario.getUserName());
-            usuarioMl.setPassword(usuario.getPassword());
-            usuarioMl.setCorreo(usuario.getCorreo());
-            usuarioMl.setStatus(0);
+            result = verificarUsername(usuario);
+            if (result.correct) {
 
-            usuarioMl.Rol = new Rol();
-            usuarioMl.Rol.setIdRol(usuario.Rol.getIdRol());
+                Usuario usuarioMl = new Usuario();
 
-            entityManager.persist(usuarioMl);
-            entityManager.flush();
+                usuarioMl.setUserName(usuario.getUserName());
+                usuarioMl.setPassword(usuario.getPassword());
+                usuarioMl.setCorreo(usuario.getCorreo());
 
-            result.correct = true;
-            result.object = usuarioMl;
+                usuarioMl.setStatus(0);
 
+                usuarioMl.Rol = new Rol();
+                usuarioMl.Rol.setIdRol(usuario.Rol.getIdRol());
+
+                entityManager.persist(usuarioMl);
+                result.correct = true;
+                entityManager.flush();
+
+                result.correct = true;
+                result.object = usuarioMl;
+            }else{
+                result.correct = false;
+                return result;
+            }
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
             result.ex = e;
         }
-
         return result;
     }
-    
+
+    @Override
     @Transactional
     public Result activarUsuarioPorCorreo(String correo) {
         Result result = new Result();
 
         try {
             Usuario usuario = entityManager
-                    .createQuery("FROM Usuario WHERE Correo = :Correo", Usuario.class)
+                    .createQuery("FROM Usuario WHERE Correo = :Correo", Usuario.class
+                    )
                     .setParameter("Correo", correo)
                     .getSingleResult();
 
@@ -74,7 +85,7 @@ public class UsuarioDAOImplementation implements IUsuario {
 
         } catch (Exception e) {
             result.correct = false;
-            result.errorMessage = "No se encontró usuario con ese correo";
+            result.errorMessage = "No se encontrÃ³ usuario con ese correo";
             result.ex = e;
         }
 
@@ -99,4 +110,61 @@ public class UsuarioDAOImplementation implements IUsuario {
         
         return result;
     }
+
+    @Override
+    @Transactional
+    public Result verificarUsername(Usuario usuario) {
+        Result result = new Result();
+        try {
+
+            Long conteo = entityManager.createQuery("select count (u) from Usuario u where upper (u.Correo) = upper (:correo)\n"
+                    + "or upper(u.UserName) = upper (:username)", Long.class)
+                    .setParameter("username", usuario.getUserName())
+                    .setParameter("correo", usuario.getCorreo())
+                    .getSingleResult();
+
+            boolean existe = conteo > 0;
+            if (existe == true) {
+                result.correct = false;
+                return result;
+            } else {
+                result.correct = true;
+                return result;
+            }
+
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+    
+    @Override
+    @Transactional
+    public Result verificarUsuario(Usuario usuario){
+        Result result = new Result();
+        try {
+            
+            String consulta = "select UserName from Usuario where Correo = :correo and Password = :password";
+            Usuario usuarioEncontrado = entityManager.createQuery(consulta, Usuario.class)
+                    .setParameter("password", usuario.getPassword())
+                    .setParameter("correo", usuario.getCorreo())
+                    .getSingleResult();
+            
+            if (usuarioEncontrado != null) {
+                result.correct = true;
+            }else{
+                result.correct = false;
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+    
+    
 }

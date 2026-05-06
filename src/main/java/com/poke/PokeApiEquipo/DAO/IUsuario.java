@@ -13,5 +13,7 @@ import com.poke.PokeApiEquipo.ML.Usuario;
  */
 public interface IUsuario {
     Result Add(Usuario usuario);
-    
+    Result activarUsuarioPorCorreo(String correo);
+    Result verificarUsername (Usuario usuario);
+    Result verificarUsuario(Usuario usuario);
 }
