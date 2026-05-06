@@ -71,7 +71,7 @@ public class EmailService {
             mailSender.send(mensaje);
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al enviar correo: " + e.getMessage());
+            throw new RuntimeException("Error al enviar correoo: " + e.getMessage());
         }
     }
 }

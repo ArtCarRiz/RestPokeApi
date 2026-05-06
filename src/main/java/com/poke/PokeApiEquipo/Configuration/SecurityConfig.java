@@ -26,9 +26,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/pokemon/**").permitAll()
-                        .requestMatchers("/usuario/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/pokemon/verificar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pokemon").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .build();
     }

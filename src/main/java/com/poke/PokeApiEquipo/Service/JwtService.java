@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.poke.PokeApiEquipo.ML.Usuario;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,6 +53,23 @@ public class JwtService {
     public String extractCorreoFromVerificationToken(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+    
+    public String generateToken(Usuario usuario) {
+    Map<String, Object> extraClaims = new HashMap<>();
+
+    extraClaims.put("tipo", "LOGIN");
+    extraClaims.put("rol", usuario.getRol().getNombreRol());
+    extraClaims.put("idUsuario", usuario.getIdUsuario());
+
+    return Jwts.builder()
+            .claims(extraClaims)
+            .subject(usuario.getCorreo())
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(getSigningKey())
+            .compact();
+    }
+    
 
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
