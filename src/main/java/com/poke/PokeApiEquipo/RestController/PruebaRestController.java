@@ -125,10 +125,10 @@ public class PruebaRestController {
         try {
 
             result = pokemonDAOImplementation.RemoveFavorito(identificador, identificadorPokemon);
-            if (result.correct) {
-                ResponseEntity.status(200).body(result);
+            if (result.correct == true) {
+                return ResponseEntity.status(200).body(result);
             } else {
-                ResponseEntity.status(400).body(result);
+                return ResponseEntity.status(400).body(result);
             }
 
         } catch (Exception e) {
