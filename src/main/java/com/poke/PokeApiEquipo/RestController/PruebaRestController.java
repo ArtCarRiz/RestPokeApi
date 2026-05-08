@@ -125,10 +125,10 @@ public class PruebaRestController {
         try {
 
             result = pokemonDAOImplementation.RemoveFavorito(identificador, identificadorPokemon);
-            if (result.correct) {
-                ResponseEntity.status(200).body(result);
+            if (result.correct == true) {
+                return ResponseEntity.status(200).body(result);
             } else {
-                ResponseEntity.status(400).body(result);
+                return ResponseEntity.status(400).body(result);
             }
 
         } catch (Exception e) {
@@ -169,6 +169,26 @@ public class PruebaRestController {
                 return ResponseEntity.status(200).body(result);
             }else{
                 return ResponseEntity.status(200).body(result);
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return ResponseEntity.badRequest().body(result);
+    }
+    
+    @GetMapping("/obtenerId")
+    public ResponseEntity obtenerIdUsuario(@RequestBody Usuario usuario){
+        Result result = new Result();
+        try {
+            
+            result = usuarioDAOImplementation.verificarUsuario(usuario);
+            if (result.correct) {
+                return ResponseEntity.status(200).body(result);
+            }else{
+                return ResponseEntity.status(400).body(result);
             }
             
         } catch (Exception e) {

@@ -146,7 +146,7 @@ public class UsuarioDAOImplementation implements IUsuario {
         Result result = new Result();
         try {
             
-            String consulta = "select UserName from Usuario where Correo = :correo and Password = :password";
+            String consulta = "select u from Usuario u where u.Correo = :correo and u.Password = :password";
             Usuario usuarioEncontrado = entityManager.createQuery(consulta, Usuario.class)
                     .setParameter("password", usuario.getPassword())
                     .setParameter("correo", usuario.getCorreo())
@@ -154,6 +154,7 @@ public class UsuarioDAOImplementation implements IUsuario {
             
             if (usuarioEncontrado != null) {
                 result.correct = true;
+                result.object = usuarioEncontrado.getIdUsuario();
             }else{
                 result.correct = false;
             }

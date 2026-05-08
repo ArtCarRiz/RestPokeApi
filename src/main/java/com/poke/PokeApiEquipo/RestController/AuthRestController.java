@@ -1,4 +1,3 @@
-
 package com.poke.PokeApiEquipo.RestController;
 
 import com.poke.PokeApiEquipo.DAO.UsuarioDAOImplementation;
@@ -18,37 +17,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthRestController {
-    
+
     @Autowired
     private UsuarioDAOImplementation usuarioDAOImplementation;
-    
+
     @Autowired
     private JwtService jwtService;
-    
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity login(@RequestBody LoginDTO loginDTO) {
         Result resultUsuario = usuarioDAOImplementation.getByUserName(loginDTO.getUsername());
-        
-        if(!resultUsuario.correct){
+
+        if (!resultUsuario.correct) {
             return ResponseEntity.status(401).body("Usuario o contraseña incorrecto");
         }
-        
+
         Usuario usuario = (Usuario) resultUsuario.object;
-        
-        if(!usuario.getPassword().equals(loginDTO.getPassword())){
+
+        if (!usuario.getPassword().equals(loginDTO.getPassword())) {
             return ResponseEntity.status(401).body("Usuario o contraseña es incorrecto");
         }
-        
+
         String token = jwtService.generateToken(usuario);
         Map<String, Object> map = new HashMap<>();
         map.put("key", token);
+        Result userid = usuarioDAOImplementation.verificarUsuario(usuario);
+        int userId =  (int) userid.object;
+        map.put("id", userId);
         Result result = new Result();
-        result.object = map.get("key");
+        
+        
+        
+        result.object = map;
         result.correct = true;
-        
+
         return ResponseEntity.ok(result);
-        
+
     }
-    
-    
+
 }
