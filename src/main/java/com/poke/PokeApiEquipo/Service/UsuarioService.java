@@ -55,6 +55,32 @@ public class UsuarioService {
         return result;
     }
     
+    @Transactional
+    public Result recuperarContraseña(String correo){
+        Result result = new Result();
+        try {
+            
+            result = usuarioDAOImplementation.verificarCuentaPorCorreo(correo);
+            Usuario usuarioVerificado =(Usuario) result.object;
+            if (result.correct) {
+                String token = jwtService.generateVerificationToken(usuarioVerificado.getCorreo());
+                
+                emailService.recuperarContraseña(usuarioVerificado.getCorreo(), token);
+                
+                result.object = "Revise su correo para recuperar contraseña";
+            }else{
+                result.correct = false;
+                
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+    
     public Result verificarCuenta(String token){
         Result result = new Result();
         try{

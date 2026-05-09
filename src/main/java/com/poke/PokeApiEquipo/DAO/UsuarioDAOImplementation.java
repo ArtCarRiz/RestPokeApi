@@ -52,7 +52,7 @@ public class UsuarioDAOImplementation implements IUsuario {
 
                 result.correct = true;
                 result.object = usuarioMl;
-            }else{
+            } else {
                 result.correct = false;
                 return result;
             }
@@ -91,23 +91,23 @@ public class UsuarioDAOImplementation implements IUsuario {
 
         return result;
     }
-    
-    public Result getByUserName(String username){
+
+    public Result getByUserName(String username) {
         Result result = new Result();
-        try{
+        try {
             Usuario usuario = entityManager.createQuery("From Usuario Where UserName = :UserName", Usuario.class)
                     .setParameter("UserName", username)
                     .getSingleResult();
-            
+
             result.object = usuario;
             result.correct = true;
-            
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
         }
-        
+
         return result;
     }
 
@@ -139,26 +139,26 @@ public class UsuarioDAOImplementation implements IUsuario {
         }
         return result;
     }
-    
+
     @Override
     @Transactional
-    public Result verificarUsuario(Usuario usuario){
+    public Result verificarUsuario(Usuario usuario) {
         Result result = new Result();
         try {
-            
+
             String consulta = "select u from Usuario u where u.Correo = :correo and u.Password = :password";
             Usuario usuarioEncontrado = entityManager.createQuery(consulta, Usuario.class)
                     .setParameter("password", usuario.getPassword())
                     .setParameter("correo", usuario.getCorreo())
                     .getSingleResult();
-            
+
             if (usuarioEncontrado != null) {
                 result.correct = true;
                 result.object = usuarioEncontrado.getIdUsuario();
-            }else{
+            } else {
                 result.correct = false;
             }
-            
+
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
@@ -166,6 +166,36 @@ public class UsuarioDAOImplementation implements IUsuario {
         }
         return result;
     }
-    
-    
+
+    @Override
+    @Transactional
+    public Result verificarCuentaPorCorreo(String correo) {
+        Result result = new Result();
+
+        try {
+            Usuario usuario = entityManager
+                    .createQuery("FROM Usuario WHERE Correo = :Correo", Usuario.class
+                    )
+                    .setParameter("Correo", correo)
+                    .getSingleResult();
+
+            if (usuario != null) {
+                if (usuario.getStatus() == 1) {
+                    result.correct = true;
+                    result.object = usuario;
+                } else {
+                    result.correct = false;
+                }
+            }else{
+                result.correct = false;
+                result.errorMessage = "el usuario no fue encontrado";
+            }
+
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
 }

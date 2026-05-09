@@ -16,4 +16,5 @@ public interface IUsuario {
     Result activarUsuarioPorCorreo(String correo);
     Result verificarUsername (Usuario usuario);
     Result verificarUsuario(Usuario usuario);
+    Result verificarCuentaPorCorreo (String correo);
 }
