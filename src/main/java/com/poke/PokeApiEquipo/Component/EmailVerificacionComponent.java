@@ -20,5 +20,7 @@ public class EmailVerificacionComponent {
                 dto.getToken()
         );
     }
+    
+    //aqui va a ir public void RecuperarContraseña
             
 }
