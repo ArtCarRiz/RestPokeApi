@@ -77,7 +77,7 @@ public class EmailService {
     public void recuperarContraseña(String correo, String token) {
         try {
 
-            String url = "http://localhost:4200/recuperar-contra" + token; 
+            String url = "http://localhost:4200/nueva-contra?token=" + token; 
             //falta una pagina personalizada
 
             MimeMessage mensaje = mailSender.createMimeMessage();

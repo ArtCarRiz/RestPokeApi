@@ -186,9 +186,36 @@ public class UsuarioDAOImplementation implements IUsuario {
                 } else {
                     result.correct = false;
                 }
-            }else{
+            } else {
                 result.correct = false;
                 result.errorMessage = "el usuario no fue encontrado";
+            }
+
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Result cambiarContra(Usuario usuario, String contraNueva) {
+        Result result = new Result();
+        try {
+
+            if (usuario != null) {
+                usuario.setPassword(contraNueva);
+                entityManager.merge(usuario);
+
+                boolean funsiono = entityManager.contains(usuario);
+                if (funsiono) {
+                    result.correct = true;
+                }
+
+            } else {
+                result.correct = false;
             }
 
         } catch (Exception e) {

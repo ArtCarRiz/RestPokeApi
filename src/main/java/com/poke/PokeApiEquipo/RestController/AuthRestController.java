@@ -74,5 +74,24 @@ public class AuthRestController {
         }
         return ResponseEntity.badRequest().body(result);
     }
+    
+    @PostMapping("/cambiarContra")
+    public ResponseEntity cambiarContra(@RequestParam String token, @RequestParam String contraNueva){
+        Result result = new Result();
+        try {
+            result = usuarioService.cambiarContra(token, contraNueva);
+            if (result.correct) {
+                return ResponseEntity.status(200).body(result);
+                
+            }else{
+                return ResponseEntity.status(400).body(result);
+            }
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return ResponseEntity.badRequest().body(result);
+    }
 
 }

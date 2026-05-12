@@ -106,4 +106,32 @@ public class UsuarioService {
         return result;
     }
     
+    public Result cambiarContra(String token, String contraNueva){
+        Result result = new Result();
+        try {
+            
+            if (!jwtService.isVerificationTokenValid(token)) {
+                result.correct = false;
+                return result;
+            }
+            String correo = jwtService.extractCorreoFromVerificationToken(token);
+            
+            result = usuarioDAOImplementation.verificarCuentaPorCorreo(correo);
+            
+            Usuario usuarioContra = (Usuario) result.object;
+            
+            result = usuarioDAOImplementation.cambiarContra(usuarioContra, contraNueva);
+            
+            if (result.correct) {
+                result.object = "contraseña recuperada";
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+    
 }
