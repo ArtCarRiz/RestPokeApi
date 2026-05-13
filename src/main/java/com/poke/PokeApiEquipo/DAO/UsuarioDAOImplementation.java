@@ -198,6 +198,27 @@ public class UsuarioDAOImplementation implements IUsuario {
         }
         return result;
     }
+    
+    public Result getByCorreo(String correo) {
+        Result result = new Result();
+
+        try {
+            Usuario usuario = entityManager
+                    .createQuery("FROM Usuario WHERE Correo = :Correo", Usuario.class)
+                    .setParameter("Correo", correo)
+                    .getSingleResult();
+
+            result.correct = true;
+            result.object = usuario;
+
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = "No existe una cuenta con ese correo";
+            result.ex = e;
+        }
+
+        return result;
+    }
 
     @Override
     @Transactional

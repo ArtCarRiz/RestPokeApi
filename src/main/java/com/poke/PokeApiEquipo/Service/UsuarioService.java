@@ -55,6 +55,38 @@ public class UsuarioService {
         return result;
     }
     
+    public Result reenviarVerificación(String correo){
+        Result result = new Result();
+        try{
+            result = usuarioDAOImplementation.getByCorreo(correo);
+            if(!result.correct){
+                result.correct = false;
+                result.errorMessage = "No existe esa cuenta";
+                return result;
+            }
+            Usuario usuario = (Usuario) result.object;
+            
+            if(usuario.getStatus() == 1){
+                result.correct = false;
+                result.errorMessage = "Esta cuenta ya esta verificada";
+                return result;
+            }
+            
+            String token = jwtService.generateVerificationToken(usuario.getCorreo());
+            
+            emailService.enviarCorreoVerificacion(usuario.getCorreo(), token);
+            
+            result.correct = true;
+            result.object = "se envio un correo para activacion";
+            
+        }catch(Exception ex){
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        return result;    
+    }
+    
     @Transactional
     public Result recuperarContraseña(String correo){
         Result result = new Result();

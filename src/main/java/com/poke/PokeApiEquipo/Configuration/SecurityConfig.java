@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/pokemon").permitAll()
                         .requestMatchers(HttpMethod.GET, "/pokemon/verificar").permitAll()
                         .requestMatchers(HttpMethod.GET, "/pokemon/verificarDatos").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pokemon/reenviar-verificacion").permitAll()
                         .requestMatchers(HttpMethod.GET, "/pokemon").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pokemon/favorito").authenticated()
                         .requestMatchers(HttpMethod.GET, "/pokemon/getFav").authenticated()
