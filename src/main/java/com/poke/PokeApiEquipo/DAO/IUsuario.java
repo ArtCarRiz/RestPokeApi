@@ -18,4 +18,5 @@ public interface IUsuario {
     Result verificarUsuario(Usuario usuario);
     Result verificarCuentaPorCorreo (String correo);
     Result cambiarContra(Usuario usuario, String contraNueva);
+    Result getAllUsuarios();
 }

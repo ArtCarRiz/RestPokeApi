@@ -66,6 +66,26 @@ public class PruebaRestController {
         }
         return ResponseEntity.badRequest().body(result);
     }
+    
+    @GetMapping("/getAll")
+    public ResponseEntity getAllUsuarios(){
+        Result result = new Result();
+        try {
+            
+            result = usuarioDAOImplementation.getAllUsuarios();
+            if (result.correct) {
+                ResponseEntity.status(200).body(result.objects);
+            }else{
+                ResponseEntity.status(400).body(result);
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return ResponseEntity.status(500).body(result);
+    }
 
     @PostMapping
     public ResponseEntity addUsuario(@RequestBody Usuario usuario) {
