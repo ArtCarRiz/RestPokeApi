@@ -16,7 +16,7 @@ public class EmailService {
     public void enviarCorreoVerificacion(String correo, String token) {
         try {
 
-            String url = "http://localhost:4200/verificar-cuenta?token=" + token;
+            String url = "http://192.167.0.94:4200/verificar-cuenta?token=" + token;
 
             MimeMessage mensaje = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
@@ -77,7 +77,7 @@ public class EmailService {
     public void recuperarContraseña(String correo, String token) {
         try {
 
-            String url = "http://localhost:4200/nueva-contra?token=" + token; 
+            String url = "http://192.167.0.94:4200/nueva-contra?token=" + token; 
             //falta una pagina personalizada
 
             MimeMessage mensaje = mailSender.createMimeMessage();

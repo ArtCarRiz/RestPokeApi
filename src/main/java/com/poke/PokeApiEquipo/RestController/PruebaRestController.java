@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/pokemon")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://192.167.0.94:4200")
 public class PruebaRestController {
 
     @Autowired
