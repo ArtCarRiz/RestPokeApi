@@ -11,6 +11,7 @@ import com.poke.PokeApiEquipo.ML.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -239,6 +240,32 @@ public class UsuarioDAOImplementation implements IUsuario {
                 result.correct = false;
             }
 
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+
+    @Override
+    public Result getAllUsuarios() {
+        Result result = new Result();
+        try {
+            
+            String jpql = "FROM USUARIO";
+            
+            List<Usuario> Usuarios = entityManager.createQuery(jpql, Usuario.class).getResultList();
+            
+            if (Usuarios == null) {
+                result.correct = false;
+                return result;
+            }else{
+                result.correct = true;
+                result.objects = Usuarios;
+                return result;
+            }
+            
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
