@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/pokemon")
-@CrossOrigin(origins = "http://192.167.0.94:4200")
+@CrossOrigin(origins = "http://192.167.0.98:4200")
 public class PruebaRestController {
 
     @Autowired
@@ -74,9 +74,9 @@ public class PruebaRestController {
             
             result = usuarioDAOImplementation.getAllUsuarios();
             if (result.correct) {
-                ResponseEntity.status(200).body(result.objects);
+                return ResponseEntity.status(200).body(result.objects);
             }else{
-                ResponseEntity.status(400).body(result);
+                return ResponseEntity.status(400).body(result);
             }
             
         } catch (Exception e) {

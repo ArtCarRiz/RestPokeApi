@@ -4,6 +4,7 @@
  */
 package com.poke.PokeApiEquipo.ML;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,23 +39,22 @@ public class Usuario {
 
     @Column(name = "password")
     private String Password;
-    
+
     @Column(name = "status")
     private int Status;
-
 
     @ManyToOne
     @JoinColumn(name = "rol")
     public com.poke.PokeApiEquipo.ML.Rol Rol;
 
     @ManyToMany
-    @JoinTable(name = "favoritos", joinColumns = @JoinColumn (name = "idusuario"), inverseJoinColumns = @JoinColumn(name = "idpokemon"))
+    @JoinTable(name = "favoritos", joinColumns = @JoinColumn(name = "idusuario"), inverseJoinColumns = @JoinColumn(name = "idpokemon"))
+    @JsonIgnore
     List<Pokemon> pokemones;
 
     public Usuario() {
 
     }
-
 
     public Usuario(int IdUsuario, String UserName, String Correo, String Password, int Status) {
 
@@ -121,5 +121,5 @@ public class Usuario {
     public void setStatus(int Status) {
         this.Status = Status;
     }
-     
+
 }
