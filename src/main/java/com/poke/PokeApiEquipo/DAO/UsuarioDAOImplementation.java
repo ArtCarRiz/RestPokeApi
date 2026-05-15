@@ -253,7 +253,7 @@ public class UsuarioDAOImplementation implements IUsuario {
         Result result = new Result();
         try {
             
-            String jpql = "FROM USUARIO";
+            String jpql = "FROM Usuario";
             
             List<Usuario> Usuarios = entityManager.createQuery(jpql, Usuario.class).getResultList();
             
