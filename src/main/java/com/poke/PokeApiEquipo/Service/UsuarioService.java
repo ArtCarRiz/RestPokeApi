@@ -6,6 +6,8 @@ import com.poke.PokeApiEquipo.ML.Result;
 import com.poke.PokeApiEquipo.ML.Usuario;
 import com.poke.PokeApiEquipo.ML.EmailVerificacionDTO;
 import jakarta.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -41,6 +43,10 @@ public class UsuarioService {
                 dto.setCorreo(usuarioGuardado.getCorreo());
                 dto.setToken(token);
                 
+                System.out.println("Entró a Add");
+                System.out.println("Correo usuario: " + usuarioGuardado.getCorreo());
+                System.out.println("Token generado: " + token);
+                System.out.println("Enviando correo...");
                 emailService.enviarCorreoVerificacion(usuarioGuardado.getCorreo(), token);
                 
                 result.object = "Usuario creado correctamente. Revisa su correo para verificar su cuenta";
@@ -124,7 +130,7 @@ public class UsuarioService {
             
             String correo = jwtService.extractCorreoFromVerificationToken(token);
             
-            result = usuarioDAOImplementation.activarUsuarioPorCorreo(correo);
+            result = usuarioDAOImplementation.activarUsuarioPorCorreo(correo);  
             
             if(result.correct){
                 result.object = "Cuenta verificada correctamente";
@@ -135,6 +141,44 @@ public class UsuarioService {
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
         }
+        return result;
+    }
+    
+    public Result verificarEstado(String correo){
+        Result result = new Result();
+
+        try {
+            Result resultUsuario = usuarioDAOImplementation.getByCorreo(correo);
+
+            if(!resultUsuario.correct){
+                result.correct = false;
+                result.errorMessage = "Usuario no encontrado";
+                return result;
+            }
+
+            Usuario usuario = (Usuario) resultUsuario.object;
+
+            if(usuario.getStatus() == 0){
+                result.correct = false;
+                result.object = false;
+                return result;
+            }
+
+            String tokenLogin = jwtService.generateToken(usuario);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("key", tokenLogin);
+            map.put("id", usuario.getIdUsuario());
+
+            result.correct = true;
+            result.object = map;
+
+        } catch(Exception ex){
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+
         return result;
     }
     

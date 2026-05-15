@@ -234,4 +234,14 @@ public class PruebaRestController {
         return ResponseEntity.badRequest().body(result);
     }
     
+    @GetMapping("/verificar-estado")
+    public ResponseEntity verificarEstado(@RequestParam String correo){
+        Result result = usuarioService.verificarEstado(correo);
+
+        if(result.correct){
+            return ResponseEntity.ok(result);
+        }
+
+        return ResponseEntity.status(200).body(result);
+    }
 }
