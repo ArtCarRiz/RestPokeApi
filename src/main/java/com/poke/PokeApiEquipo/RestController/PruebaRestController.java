@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/pokemon")
-@CrossOrigin(origins = "http://192.167.0.98:4200")
+@CrossOrigin(origins = "http://192.167.0.227:4200")
 public class PruebaRestController {
 
     @Autowired
@@ -244,4 +245,43 @@ public class PruebaRestController {
 
         return ResponseEntity.status(200).body(result);
     }
+    
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity deleteUser(@RequestParam int identificador){
+        Result result = new Result();
+        try {
+            
+            result = usuarioDAOImplementation.deleteUser(identificador);
+            if (result.correct) {
+                return ResponseEntity.status(200).body(result);
+            }else{
+                return ResponseEntity.status(400).body(result);
+            }
+            
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return ResponseEntity.badRequest().body(result);
+    }
+    
+    @PatchMapping
+    public ResponseEntity updateUser (@RequestBody Usuario usuario){
+        Result result = new Result();
+        try {
+            result = usuarioDAOImplementation.updateUser(usuario);
+            if (result.correct) {
+                return ResponseEntity.status(200).body(result);
+            }else{
+                return ResponseEntity.status(400).body(result);
+            }
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return ResponseEntity.badRequest().body(500);
+    }
+    
 }

@@ -8,11 +8,13 @@ import com.poke.PokeApiEquipo.ML.Pokemon;
 import com.poke.PokeApiEquipo.ML.Result;
 import com.poke.PokeApiEquipo.ML.Rol;
 import com.poke.PokeApiEquipo.ML.Usuario;
+import com.poke.PokeApiEquipo.Service.UsuarioService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,6 +27,10 @@ public class UsuarioDAOImplementation implements IUsuario {
     @Autowired
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Lazy
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Override
     @Transactional
@@ -199,7 +205,7 @@ public class UsuarioDAOImplementation implements IUsuario {
         }
         return result;
     }
-    
+
     public Result getByCorreo(String correo) {
         Result result = new Result();
 
@@ -252,25 +258,104 @@ public class UsuarioDAOImplementation implements IUsuario {
     public Result getAllUsuarios() {
         Result result = new Result();
         try {
-            
+
             String jpql = "FROM Usuario";
-            
+
             List<Usuario> Usuarios = entityManager.createQuery(jpql, Usuario.class).getResultList();
-            
+
             if (Usuarios == null) {
                 result.correct = false;
                 return result;
-            }else{
+            } else {
                 result.correct = true;
                 result.objects = Usuarios;
                 return result;
             }
-            
+
         } catch (Exception e) {
             result.correct = false;
             result.errorMessage = e.getLocalizedMessage();
             result.ex = e;
         }
         return result;
+    }
+
+    @Override
+    @Transactional
+    public Result deleteUser(int identificador) {
+        Result result = new Result();
+        try {
+
+            Usuario usuario = entityManager.find(Usuario.class, identificador);
+
+            if (usuario != null) {
+                usuario.getPokemones().clear();
+                result.correct = true;
+                if (result.correct) {
+                    entityManager.remove(usuario);
+                    result.correct = true;
+                    return result;
+                }
+            } else {
+                result.correct = false;
+            }
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Result updateUser(Usuario usuario) {
+        Result result = new Result();
+        try {
+            Usuario usuarioN = entityManager.find(Usuario.class, usuario.getIdUsuario());
+            if (usuarioN == null) {
+                result.object = "Ese usuario no existe";
+                result.correct = false;
+                return result;
+            }
+
+            boolean cambioUserName = !usuario.getUserName().equals(usuarioN.getUserName());
+            boolean cambioCorreo = !usuario.getCorreo().equals(usuarioN.getCorreo());
+
+            if (cambioUserName) {
+                Result resultT = getByUserName(usuario.getUserName());
+                if (resultT.correct) { 
+                    result.correct = false;
+                    result.object = "El nombre de usuario ya está en uso.";
+                    return result;
+                }
+            }
+
+            if (cambioCorreo) {
+                Result resultC = getByCorreo(usuario.getCorreo());
+                if (resultC.correct) { 
+                    result.correct = false;
+                    result.object = "El correo ya está en uso.";
+                    return result;
+                }
+            }
+
+            usuarioN.setUserName(usuario.getUserName());
+            usuarioN.setCorreo(usuario.getCorreo());
+            usuarioN.setPassword(usuario.getPassword());
+            usuarioN.setStatus(0);
+
+            usuarioService.reenviarVerificación(usuario.getCorreo());
+            entityManager.merge(usuarioN);
+
+            result.correct = true;
+            return result;
+
+        } catch (Exception e) {
+            result.correct = false;
+            result.errorMessage = e.getLocalizedMessage();
+            result.ex = e;
+            return result;
+        }
     }
 }
