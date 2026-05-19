@@ -42,6 +42,7 @@ public class SecurityConfig {
 
                     .requestMatchers(HttpMethod.POST, "/pokemon").permitAll()
                     .requestMatchers(HttpMethod.GET, "/pokemon").permitAll()
+                    .requestMatchers(HttpMethod.PATCH, "/pokemon").permitAll()
 
                     .requestMatchers(HttpMethod.GET, "/pokemon/verificar").permitAll()
                     .requestMatchers(HttpMethod.GET, "/pokemon/verificarDatos").permitAll()
@@ -67,7 +68,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:4200",
                 "http://localhost:8081",
-                "http://192.167.0.98:4200"
+                "http://192.167.0.227:4200"
         ));
 
         config.setAllowedMethods(List.of(
